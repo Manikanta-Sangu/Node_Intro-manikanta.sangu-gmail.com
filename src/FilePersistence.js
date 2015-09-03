@@ -18,6 +18,22 @@ NOTES: 		1) All the properties of the contact (firstName, lastName, phone) can h
 			   need to think of how read contact(s) will be implemented as well to ensure both Add/Read will work.
 */
 exports.AddContact = function(filename, contact){
+  var contacts = fs.readFileSync(filename,"utf8");
+  if(contacts){
+     try{
+     	contacts = JSON.parse(contacts);
+      contacts.push(contact);
+     }
+     catch(err)
+     {
+     	console.log("error in parsing json string");
+     }
+  }
+  else{
+    contacts = [];
+    contacts.push(contact);    
+  }
+  fs.writeFileSync(filename,JSON.stringify(contacts));
 
 }
 
@@ -33,7 +49,17 @@ NOTES: 		1) All the properties of the contact (firstName, lastName, phone) can h
 */
 
 exports.ReadContacts = function(filename){
-
+  var contacts = fs.readFileSync(filename,"utf8");
+  if(contacts){
+     try{
+     	contacts = JSON.parse(contacts);
+     }
+     catch(err)
+     {
+     	console.log("error in parsing json string");
+     }
+  }
+  return contacts;
 }
 
 /*
@@ -50,7 +76,23 @@ NOTES: 		You need to only come up with a functionally correct solution and it do
 
 */
 exports.UpdateContact = function(filename, contactname, newPhoneNumber){
-
+  var contacts = fs.readFileSync(filename,"utf8");
+  if(contacts){
+     try{
+     	contacts = JSON.parse(contacts);
+      for(i in contacts){
+         if(contacts[i].firstName == contactname){
+           contacts[i].phone = newPhoneNumber;
+        }
+      }
+       fs.writeFileSync(filename,JSON.stringify(contacts));
+     }
+     catch(err)
+     {
+     	console.log("error in parsing json string");
+     }
+  }
+  
 }
 
 /*
@@ -66,6 +108,22 @@ NOTES: 		You need to only come up with a functionally correct solution and it do
 
 */
 exports.DeleteContact = function(filename, contactname){
-
+  var contacts = fs.readFileSync(filename,"utf8");
+  if(contacts){
+     try{
+     	contacts = JSON.parse(contacts);
+      for(i in contacts){
+        if(contacts[i].firstName == contactname){
+           contacts.splice(i, 1);
+        }
+      }
+     fs.writeFileSync(filename,JSON.stringify(contacts));
+     }
+     catch(err)
+     {
+     	console.log("error in parsing json string");
+     }
+  }
+  
 }
 
